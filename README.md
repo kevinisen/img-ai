@@ -16,7 +16,7 @@ L’ensemble du traitement de reconnaissance d’image est effectué côté navi
 
 ### Schéma de l’architecture
 
-![Schéma de l’architecture](assets/readme/architecture.png)
+![Schéma de l’architecture](assets/readme/Archi.png)
 
 ### Description des composants
 
