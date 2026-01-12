@@ -4,184 +4,51 @@
         <meta charset="UTF-8" />
         <title>Détection d’objets avec COCO-SSD</title>
 
+        <!-- CSS -->
+        <link
+            rel="stylesheet"
+            href="style.css"
+        />
+
         <!-- TensorFlow.js -->
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
 
         <!-- Modèle COCO-SSD -->
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
 
-        <style>
-            #container {
-                position: relative;
-                display: inline-block;
-            }
-
-            img,
-            canvas {
-                max-width: 600px;
-            }
-
-            canvas {
-                position: absolute;
-                top: 0;
-                left: 0;
-                pointer-events: none;
-            }
-        </style>
+        <!-- JS de l’application -->
+        <script
+            src="script.js"
+            defer
+        ></script>
     </head>
     <body>
-        <h1>Détection d’objets</h1>
+        <div class="app">
+            <h1>Détection d’objets</h1>
 
-        <!-- Saisie URL -->
-        <input
-            type="text"
-            id="imageUrl"
-            placeholder="URL de l'image"
-            size="50"
-        />
-        <button onclick="chargerImage()">Charger l’image</button>
-
-        <br /><br />
-
-        <!-- Conteneur image -->
-        <div id="container">
-            <img
-                id="image"
-                crossorigin="anonymous"
+            <input
+                type="text"
+                id="imageUrl"
+                placeholder="URL de l'image"
+                size="50"
             />
-            <canvas id="canvas"></canvas>
+            <button id="loadBtn">Charger l’image</button>
+
+            <p class="hint">
+                ℹ️ Utilisez de préférence des images provenant de Wikimedia,
+                Unsplash, Pixabay ou Pexels.
+            </p>
+
+            <div id="container">
+                <img
+                    id="image"
+                    crossorigin="anonymous"
+                />
+                <canvas id="canvas"></canvas>
+            </div>
+
+            <h2>Objets détectés</h2>
+            <ul id="results"></ul>
         </div>
-        <h2>Objets détectés</h2>
-        <ul id="results"></ul>
-
-        <script>
-            let model
-
-            async function chargerModele() {
-                model = await cocoSsd.load()
-                console.log("✅ Modèle COCO-SSD chargé")
-            }
-
-            // function chargerImage() {
-            //     const url = document.getElementById("imageUrl").value
-            //     const img = document.getElementById("image")
-            //     const results = document.getElementById("results")
-
-            //     // Reset
-            //     results.innerHTML = ""
-            //     img.src = ""
-
-            //     img.onload = async () => {
-            //         console.log("✅ Image chargée, lancement de la détection")
-
-            //         if (!model) {
-            //             alert("❌ Le modèle n’est pas encore chargé")
-            //             return
-            //         }
-
-            //         const predictions = await model.detect(img)
-            //         afficherResultats(predictions)
-            //         dessinerCadres(predictions)
-            //     }
-
-            //     img.onerror = () => {
-            //         alert(
-            //             "❌ Impossible de charger l’image.\n" +
-            //                 "Elle est peut-être bloquée par CORS ou invalide."
-            //         )
-            //     }
-
-            //     img.src = url
-            // }
-
-            function chargerImage() {
-                const url = document.getElementById("imageUrl").value
-                const img = document.getElementById("image")
-                const results = document.getElementById("results")
-                const canvas = document.getElementById("canvas")
-                const ctx = canvas.getContext("2d")
-
-                // 🔄 RESET affichage
-                results.innerHTML = ""
-                ctx.clearRect(0, 0, canvas.width, canvas.height)
-                canvas.width = 0
-                canvas.height = 0
-
-                // Reset image
-                img.src = ""
-
-                img.onload = async () => {
-                    console.log("✅ Image chargée, lancement de la détection")
-
-                    if (!model) {
-                        alert("❌ Le modèle n’est pas encore chargé")
-                        return
-                    }
-
-                    const predictions = await model.detect(img)
-                    afficherResultats(predictions)
-                    dessinerCadres(predictions)
-                }
-
-                img.onerror = () => {
-                    alert(
-                        "❌ Impossible de charger l’image.\n" +
-                            "Elle est peut-être bloquée par CORS ou invalide."
-                    )
-                }
-
-                img.src = url
-            }
-
-            function afficherResultats(predictions) {
-                console.log(predictions)
-                const results = document.getElementById("results")
-
-                if (predictions.length === 0) {
-                    results.innerHTML = "<li>Aucun objet détecté</li>"
-                    return
-                }
-
-                predictions.forEach((prediction) => {
-                    const li = document.createElement("li")
-                    li.textContent = `${prediction.class} — ${(
-                        prediction.score * 100
-                    ).toFixed(1)} %`
-                    results.appendChild(li)
-                })
-            }
-
-            function dessinerCadres(predictions) {
-                const img = document.getElementById("image")
-                const canvas = document.getElementById("canvas")
-                const ctx = canvas.getContext("2d")
-
-                // Adapter le canvas à l’image
-                canvas.width = img.width
-                canvas.height = img.height
-
-                ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-                predictions.forEach((prediction) => {
-                    const [x, y, width, height] = prediction.bbox
-
-                    // Rectangle
-                    ctx.strokeStyle = "green"
-                    ctx.lineWidth = 2
-                    ctx.strokeRect(x, y, width, height)
-
-                    // Label
-                    const label = `${prediction.class} (${(
-                        prediction.score * 100
-                    ).toFixed(1)}%)`
-
-                    ctx.fillStyle = "green"
-                    ctx.font = "16px Arial"
-                    ctx.fillText(label, x, y > 20 ? y - 5 : y + 20)
-                })
-            }
-
-            chargerModele()
-        </script>
     </body>
 </html>

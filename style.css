@@ -1,0 +1,77 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  background-color: #f7f7f7;
+}
+
+.app {
+  margin-top: 40px;
+  padding: 20px 30px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+}
+
+
+h1 {
+  margin-bottom: 10px;
+}
+
+#container {
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+img,
+canvas {
+  max-width: 600px;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+button {
+  padding: 6px 12px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.hint {
+  font-size: 0.9em;
+  color: #666;
+}
+
+#results {
+  margin-top: 10px;
+}
+
+input[type="text"] {
+  padding: 6px;
+  width: 70%;
+  max-width: 400px;
+}
+
+#results {
+  list-style: none;
+  padding: 0;
+}
+
+#results li {
+  margin: 4px 0;
+}
+
